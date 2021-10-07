@@ -1,32 +1,30 @@
 let direcciones = {x: 0, y: 0}; 
-
-const sonidoComida = new Audio('/assets/music/food.mp3');
-const sonidoJuegoTerminado = new Audio('/assets/music/gameover.mp3');
-const sonidoMovimiento = new Audio('/assets/music/move.mp3');
-const sonidoMusica = new Audio('/assets/music/music.mp3');
-
+const sonidoComida = new Audio('assets/music/food.mp3');
+const sonidoJuegoTerminado = new Audio('assets/music/gameover.mp3');
+const sonidoMovimiento = new Audio('assets/music/move.mp3');
+const sonidoMusica = new Audio('assets/music/music.mp3');
 let velocidad = 7;
-let puntuacionInicial = 0;
+let puntuacion = 0;
 let ultimaVez = 0;
 let snakeArreglo = [{x: 13, y: 15}];
 
-comida = {x: 6, y: 7};
+food = {x: 6, y: 7};
 
 function main(tiempo) 
 {
     window.requestAnimationFrame(main);
 
-    if((tiempo - ultimaVez)/1000 < 1/speed)
+    if((tiempo - ultimaVez)/1000 < 1/velocidad)
     {
         return;
     }
 
     ultimaVez = tiempo;
 
-    juego();
+    gameEngine();
 }
 
-function colisiono(snake) 
+function isCollide(snake) 
 {
     for (let i = 1; i < snakeArreglo.length; i++) 
     {
@@ -35,7 +33,6 @@ function colisiono(snake)
             return true;
         }
     }
-
     if(snake[0].x >= 18 || snake[0].x <=0 || snake[0].y >= 18 || snake[0].y <=0)
     {
         return true
@@ -44,9 +41,8 @@ function colisiono(snake)
     return false;
 }
 
-function juego()
-{
-    if(colisiono(snakeArreglo))
+function gameEngine(){
+    if(isCollide(snakeArreglo))
     {
         sonidoJuegoTerminado.play();
         sonidoMusica.pause();
@@ -54,29 +50,27 @@ function juego()
         alert("Juego Terminado, presione cualquier tecla para continuar");
         snakeArreglo = [{x: 13, y: 15}];
         sonidoMusica.play();
-        puntuacionInicial = 0; 
+        puntuacion = 0; 
     }
 
-    if(snakeArreglo[0].y === comida.y && snakeArreglo[0].x === comida.x)
+    if(snakeArreglo[0].y === food.y && snakeArreglo[0].x ===food.x)
     {
         sonidoComida.play();
-
-        puntuacionInicial += 1;
-
-        if(puntuacionInicial>puntuacionMasAlta)
+        puntuacion += 1;
+        if(puntuacion>hiscoreval)
         {
-            puntuacionMasAlta = puntuacionInicial;
-            localStorage.setItem("puntuacion", JSON.stringify(puntuacionMasAlta));
-            hiscoreBox.innerHTML = "Puntuación Maxima: " + puntuacionMasAlta;
+            hiscoreval = puntuacion;
+            localStorage.setItem("hiscore", JSON.stringify(hiscoreval));
+            hiscoreBox.innerHTML = "Puntuación Maxima: " + hiscoreval;
         }
 
-        zonaPuntuacion.innerHTML = "Puntuación: " + puntuacionInicial;
+        scoreBox.innerHTML = "Puntuación: " + puntuacion;
         snakeArreglo.unshift({x: snakeArreglo[0].x + direcciones.x, y: snakeArreglo[0].y + direcciones.y});
 
         let a = 2;
         let b = 16;
 
-        comida = {x: Math.round(a + (b-a)* Math.random()), y: Math.round(a + (b-a)* Math.random())}
+        food = {x: Math.round(a + (b-a)* Math.random()), y: Math.round(a + (b-a)* Math.random())}
     }
 
     for (let i = snakeArreglo.length - 2; i>=0; i--) 
@@ -87,8 +81,7 @@ function juego()
     snakeArreglo[0].x += direcciones.x;
     snakeArreglo[0].y += direcciones.y;
 
-    tablero.innerHTML = "";
-
+    board.innerHTML = "";
     snakeArreglo.forEach((e, index)=>
     {
         snakeElement = document.createElement('div');
@@ -103,29 +96,30 @@ function juego()
         {
             snakeElement.classList.add('snake');
         }
+
         board.appendChild(snakeElement);
     });
 
     foodElement = document.createElement('div');
-    foodElement.style.gridRowStart = comida.y;
-    foodElement.style.gridColumnStart = comida.x;
-    foodElement.classList.add('comida')
-    tablero.appendChild(foodElement);
+    foodElement.style.gridRowStart = food.y;
+    foodElement.style.gridColumnStart = food.x;
+    foodElement.classList.add('food')
+    board.appendChild(foodElement);
 }
 
 sonidoMusica.play();
 
-let puntuacion = localStorage.getItem("puntuacion");
+let hiscore = localStorage.getItem("hiscore");
 
-if(puntuacion === null)
+if(hiscore === null)
 {
-    puntuacionMasAlta = 0;
-    localStorage.setItem("puntuacion", JSON.stringify(puntuacionMasAlta))
+    hiscoreval = 0;
+    localStorage.setItem("hiscore", JSON.stringify(hiscoreval))
 }
 else
 {
-    puntuacionMasAlta = JSON.parse(puntuacion);
-    zonaPuntuacionMaxima.innerHTML = "Puntuación Maxima: " + puntuacion;
+    hiscoreval = JSON.parse(hiscore);
+    hiscoreBox.innerHTML = "Puntuación Maxima: " + hiscore;
 }
 
 window.requestAnimationFrame(main);
@@ -133,6 +127,7 @@ window.addEventListener('keydown', e =>
 {
     direcciones = {x: 0, y: 1}
     sonidoMovimiento.play();
+
     switch (e.key) 
     {
         case "ArrowUp":
