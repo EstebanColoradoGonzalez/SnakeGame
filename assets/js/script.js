@@ -66,7 +66,7 @@ function juego()
         if(puntuacionInicial>puntuacionMasAlta)
         {
             puntuacionMasAlta = puntuacionInicial;
-            localStorage.setItem("puntuacionMaxima", JSON.stringify(puntuacionMasAlta));
+            localStorage.setItem("puntuacion", JSON.stringify(puntuacionMasAlta));
             hiscoreBox.innerHTML = "Puntuación Maxima: " + puntuacionMasAlta;
         }
 
@@ -112,3 +112,19 @@ function juego()
     foodElement.classList.add('food')
     board.appendChild(foodElement);
 }
+
+sonidoMusica.play();
+
+let puntuacion = localStorage.getItem("puntuacion");
+
+if(puntuacion === null)
+{
+    puntuacionMasAlta = 0;
+    localStorage.setItem("puntuacion", JSON.stringify(puntuacionMasAlta))
+}
+else
+{
+    puntuacionMasAlta = JSON.parse(puntuacion);
+    ZonaPuntuacionMaxima.innerHTML = "Puntuación Maxima: " + puntuacion;
+}
+
