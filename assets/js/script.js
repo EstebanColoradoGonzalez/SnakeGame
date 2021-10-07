@@ -128,3 +128,33 @@ else
     ZonaPuntuacionMaxima.innerHTML = "Puntuación Maxima: " + puntuacion;
 }
 
+window.requestAnimationFrame(main);
+window.addEventListener('keydown', e =>
+{
+    direcciones = {x: 0, y: 1}
+    sonidoMovimiento.play();
+    switch (e.key) 
+    {
+        case "ArrowUp":
+            direcciones.x = 0;
+            direcciones.y = -1;
+            break;
+
+        case "ArrowDown":
+            direcciones.x = 0;
+            direcciones.y = 1;
+            break;
+
+        case "ArrowLeft":
+            direcciones.x = -1;
+            direcciones.y = 0;
+            break;
+
+        case "ArrowRight":
+            direcciones.x = 1;
+            direcciones.y = 0;
+            break;
+        default:
+            break;
+    }
+});
