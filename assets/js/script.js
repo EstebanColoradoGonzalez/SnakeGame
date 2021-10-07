@@ -11,3 +11,17 @@ let ultimaVez = 0;
 let snakeArreglo = [{x: 13, y: 15}];
 
 comida = {x: 6, y: 7};
+
+function main(tiempo) 
+{
+    window.requestAnimationFrame(main);
+
+    if((tiempo - ultimaVez)/1000 < 1/speed)
+    {
+        return;
+    }
+
+    ultimaVez = tiempo;
+
+    gameEngine();
+}
