@@ -70,7 +70,7 @@ function juego()
             hiscoreBox.innerHTML = "Puntuación Maxima: " + puntuacionMasAlta;
         }
 
-        scoreBox.innerHTML = "Puntuación: " + puntuacionInicial;
+        zonaPuntuacion.innerHTML = "Puntuación: " + puntuacionInicial;
         snakeArreglo.unshift({x: snakeArreglo[0].x + direcciones.x, y: snakeArreglo[0].y + direcciones.y});
 
         let a = 2;
@@ -107,10 +107,10 @@ function juego()
     });
 
     foodElement = document.createElement('div');
-    foodElement.style.gridRowStart = food.y;
-    foodElement.style.gridColumnStart = food.x;
-    foodElement.classList.add('food')
-    board.appendChild(foodElement);
+    foodElement.style.gridRowStart = comida.y;
+    foodElement.style.gridColumnStart = comida.x;
+    foodElement.classList.add('comida')
+    tablero.appendChild(foodElement);
 }
 
 sonidoMusica.play();
@@ -125,7 +125,7 @@ if(puntuacion === null)
 else
 {
     puntuacionMasAlta = JSON.parse(puntuacion);
-    ZonaPuntuacionMaxima.innerHTML = "Puntuación Maxima: " + puntuacion;
+    zonaPuntuacionMaxima.innerHTML = "Puntuación Maxima: " + puntuacion;
 }
 
 window.requestAnimationFrame(main);
