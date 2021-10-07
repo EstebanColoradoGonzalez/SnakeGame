@@ -15,6 +15,18 @@
     align-items: center;
 }
 
+#firma
+{
+    text-align: left;
+    position: absolute;
+    top: 9px;
+    right: 1010px;
+    font-size: 25px;
+    font-weight: bold;
+    font-family: 'New Tegomin', serif;
+}
+
+
 #scoreBox
 {
     position: absolute;
