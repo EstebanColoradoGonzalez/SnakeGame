@@ -2,8 +2,8 @@ let direcciones = {x: 0, y: 0};
 
 const sonidoComida = new Audio('/assets/music/food.mp3');
 const sonidoJuegoTerminado = new Audio('/assets/music/gameover.mp3');
-const SonidoMovimiento = new Audio('/assets/music/move.mp3');
-const SonidoMusica = new Audio('/assets/music/music.mp3');
+const sonidoMovimiento = new Audio('/assets/music/move.mp3');
+const sonidoMusica = new Audio('/assets/music/music.mp3');
 
 let velocidad = 7;
 let puntuacionInicial = 0;
@@ -23,7 +23,7 @@ function main(tiempo)
 
     ultimaVez = tiempo;
 
-    gameEngine();
+    juego();
 }
 
 function colisiono(snake) 
@@ -42,4 +42,73 @@ function colisiono(snake)
     }
         
     return false;
+}
+
+function juego()
+{
+    if(colisiono(snakeArreglo))
+    {
+        sonidoJuegoTerminado.play();
+        sonidoMusica.pause();
+        direcciones =  {x: 0, y: 0}; 
+        alert("Juego Terminado, presione cualquier tecla para continuar");
+        snakeArreglo = [{x: 13, y: 15}];
+        sonidoMusica.play();
+        puntuacionInicial = 0; 
+    }
+
+    if(snakeArreglo[0].y === comida.y && snakeArreglo[0].x === comida.x)
+    {
+        sonidoComida.play();
+
+        puntuacionInicial += 1;
+
+        if(puntuacionInicial>puntuacionMasAlta)
+        {
+            puntuacionMasAlta = puntuacionInicial;
+            localStorage.setItem("puntuacionMaxima", JSON.stringify(puntuacionMasAlta));
+            hiscoreBox.innerHTML = "Puntuación Maxima: " + puntuacionMasAlta;
+        }
+
+        scoreBox.innerHTML = "Puntuación: " + puntuacionInicial;
+        snakeArreglo.unshift({x: snakeArreglo[0].x + direcciones.x, y: snakeArreglo[0].y + direcciones.y});
+
+        let a = 2;
+        let b = 16;
+
+        comida = {x: Math.round(a + (b-a)* Math.random()), y: Math.round(a + (b-a)* Math.random())}
+    }
+
+    for (let i = snakeArreglo.length - 2; i>=0; i--) 
+    { 
+        snakeArreglo[i+1] = {...snakeArreglo[i]};
+    }
+
+    snakeArreglo[0].x += direcciones.x;
+    snakeArreglo[0].y += direcciones.y;
+
+    tablero.innerHTML = "";
+
+    snakeArreglo.forEach((e, index)=>
+    {
+        snakeElement = document.createElement('div');
+        snakeElement.style.gridRowStart = e.y;
+        snakeElement.style.gridColumnStart = e.x;
+
+        if(index === 0)
+        {
+            snakeElement.classList.add('head');
+        }
+        else
+        {
+            snakeElement.classList.add('snake');
+        }
+        board.appendChild(snakeElement);
+    });
+
+    foodElement = document.createElement('div');
+    foodElement.style.gridRowStart = food.y;
+    foodElement.style.gridColumnStart = food.x;
+    foodElement.classList.add('food')
+    board.appendChild(foodElement);
 }
